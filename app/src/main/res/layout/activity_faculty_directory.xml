@@ -17,6 +17,14 @@
             android:orientation="vertical"
             android:padding="20dp">
 
+<<<<<<< HEAD
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Faculty"
+                style="@style/TextAppearance.App.TitleLarge"
+                android:layout_marginBottom="16dp" />
+=======
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,6 +49,7 @@
                     app:strokeColor="@color/ios_blue"
                     app:strokeWidth="1dp" />
             </RelativeLayout>
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
 
             <com.google.android.material.card.MaterialCardView
                 style="@style/AppleCard"

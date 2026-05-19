@@ -1,22 +1,56 @@
 package com.example.facultyflow.student
 
 import android.os.Bundle
+<<<<<<< HEAD
+import androidx.appcompat.app.AppCompatActivity
+=======
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.facultyflow.databinding.ActivityMyBookingsBinding
 import com.example.facultyflow.student.adapters.MyBookingsAdapter
 import com.example.facultyflow.student.models.Booking
+<<<<<<< HEAD
+import com.example.ai.SmartEngine
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+=======
 import com.example.facultyflow.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
 
 class MyBookingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyBookingsBinding
+<<<<<<< HEAD
+    private lateinit var adapter: MyBookingsAdapter
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityMyBookingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        setupRecycler()
+        loadBookings()
+    }
+
+    private fun setupRecycler() {
+        adapter = MyBookingsAdapter()
+        binding.rvBookings.layoutManager = LinearLayoutManager(this)
+        binding.rvBookings.adapter = adapter
+    }
+
+    private fun loadBookings() {
+
+=======
     private lateinit var bookingsAdapter: MyBookingsAdapter
     private var currentFilter = "all"
     private lateinit var db: FirebaseFirestore
@@ -72,10 +106,27 @@ class MyBookingsActivity : AppCompatActivity() {
     }
 
     private fun fetchBookings() {
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
         val studentId = auth.currentUser?.uid ?: return
 
         db.collection("bookings")
             .whereEqualTo("studentId", studentId)
+<<<<<<< HEAD
+            .get()
+            .addOnSuccessListener { result ->
+
+                val bookings = result.map {
+                    it.toObject(Booking::class.java)
+                }
+
+                // ✅ CORRECT PLACE TO CALL AI
+                val sortedBookings = SmartEngine.sortStudentBookings(bookings)
+
+                adapter.submitList(sortedBookings)
+            }
+    }
+}
+=======
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { value, error ->
                 if (error != null) {
@@ -148,3 +199,4 @@ class MyBookingsActivity : AppCompatActivity() {
         }
     }
 }
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59

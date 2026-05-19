@@ -1,8 +1,16 @@
 package com.example.facultyflow.faculty
 
+<<<<<<< HEAD
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+=======
+import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.facultyflow.databinding.ActivityBookingInboxBinding
@@ -12,6 +20,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+<<<<<<< HEAD
+// ✅ AI
+import com.example.ai.SmartEngine
+import com.example.ai.TimetableSlot
+
+=======
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
 class BookingInboxActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBookingInboxBinding
@@ -19,6 +34,17 @@ class BookingInboxActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
+<<<<<<< HEAD
+    // ✅ FILE PICKER
+    private val timetablePicker =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                processTimetable(it)
+            }
+        }
+
+=======
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookingInboxBinding.inflate(layoutInflater)
@@ -36,13 +62,31 @@ class BookingInboxActivity : AppCompatActivity() {
         binding.ivBack.setOnClickListener {
             finish()
         }
+<<<<<<< HEAD
+
+        binding.btnUploadTimetable.setOnClickListener {
+            pickTimetableFile()
+        }
+=======
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
     }
 
     private fun setupBookingsList() {
         bookingAdapter = BookingRequestAdapter(
+<<<<<<< HEAD
+            onAccept = { booking, reply ->
+                updateBookingStatus(booking.id, "confirmed", reply)
+            },
+            onDecline = { booking, reply ->
+                updateBookingStatus(booking.id, "declined", reply)
+            }
+        )
+
+=======
             onAccept = { booking -> updateBookingStatus(booking.id, "confirmed") },
             onDecline = { booking -> updateBookingStatus(booking.id, "declined") }
         )
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
         binding.rvBookings.apply {
             layoutManager = LinearLayoutManager(this@BookingInboxActivity)
             adapter = bookingAdapter
@@ -57,18 +101,35 @@ class BookingInboxActivity : AppCompatActivity() {
             .whereEqualTo("status", "pending")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener { value, error ->
+<<<<<<< HEAD
+
+=======
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
                 if (error != null) {
                     if (error.message?.contains("index") == true) {
                         fetchBookingsWithoutOrder(facultyId)
                     } else {
+<<<<<<< HEAD
+                        Toast.makeText(
+                            this,
+                            "Error fetching bookings: ${error.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+=======
                         Toast.makeText(this, "Error fetching bookings: ${error.message}", Toast.LENGTH_SHORT).show()
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
                     }
                     return@addSnapshotListener
                 }
 
                 val bookings = mutableListOf<BookingRequest>()
                 value?.forEach { doc ->
+<<<<<<< HEAD
+                    val booking =
+                        doc.toObject(BookingRequest::class.java).copy(id = doc.id)
+=======
                     val booking = doc.toObject(BookingRequest::class.java).copy(id = doc.id)
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
                     bookings.add(booking)
                 }
 
@@ -81,23 +142,50 @@ class BookingInboxActivity : AppCompatActivity() {
             .whereEqualTo("facultyId", facultyId)
             .whereEqualTo("status", "pending")
             .addSnapshotListener { value, error ->
+<<<<<<< HEAD
+
+                if (error != null) {
+                    Toast.makeText(
+                        this,
+                        "Error: ${error.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+=======
                 if (error != null) {
                     Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
                     return@addSnapshotListener
                 }
 
                 val bookings = mutableListOf<BookingRequest>()
                 value?.forEach { doc ->
+<<<<<<< HEAD
+                    val booking =
+                        doc.toObject(BookingRequest::class.java).copy(id = doc.id)
+                    bookings.add(booking)
+                }
+
+=======
                     val booking = doc.toObject(BookingRequest::class.java).copy(id = doc.id)
                     bookings.add(booking)
                 }
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
                 updateUI(bookings)
             }
     }
 
     private fun updateUI(bookings: List<BookingRequest>) {
+<<<<<<< HEAD
+
+        val sortedList = SmartEngine.sortRequests(bookings)
+
+        bookingAdapter.submitList(sortedList)
+
+        if (sortedList.isEmpty()) {
+=======
         bookingAdapter.submitList(bookings)
         if (bookings.isEmpty()) {
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
             binding.rvBookings.visibility = View.GONE
             binding.emptyState.visibility = View.VISIBLE
         } else {
@@ -106,14 +194,86 @@ class BookingInboxActivity : AppCompatActivity() {
         }
     }
 
+<<<<<<< HEAD
+    private fun updateBookingStatus(
+        bookingId: String,
+        newStatus: String,
+        reply: String
+    ) {
+        val updates = mapOf(
+            "status" to newStatus,
+            "facultyReply" to reply
+        )
+
+        db.collection("bookings").document(bookingId)
+            .update(updates)
+=======
     private fun updateBookingStatus(bookingId: String, newStatus: String) {
         db.collection("bookings").document(bookingId)
             .update("status", newStatus)
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
             .addOnSuccessListener {
                 Toast.makeText(this, "Booking $newStatus", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
+<<<<<<< HEAD
+                Toast.makeText(
+                    this,
+                    "Failed to update booking: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
+    private fun pickTimetableFile() {
+        timetablePicker.launch("*/*")
+    }
+
+    // 🔥 FINAL AI + STORAGE LOGIC
+    private fun processTimetable(uri: Uri) {
+
+        Toast.makeText(this, "Scanning timetable...", Toast.LENGTH_SHORT).show()
+
+        SmartEngine.scanTimetable(this, uri) { busySlots ->
+
+            val facultyId = auth.currentUser?.uid ?: return@scanTimetable
+
+            // ✅ MAP TO STRING FOR COMPATIBILITY
+            val slotStrings = busySlots.map { it.time }
+
+            // ✅ SAVE TO FIRESTORE
+            val data = mapOf(
+                "slots" to slotStrings
+            )
+
+            db.collection("timetables")
+                .document(facultyId)
+                .set(data)
+                .addOnSuccessListener {
+
+                    Toast.makeText(
+                        this,
+                        "Saved ${busySlots.size} busy slots",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        this,
+                        "Failed to save timetable",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            // debug logs
+            busySlots.forEach {
+                android.util.Log.d("AI_TIMETABLE", it.time)
+            }
+        }
+    }
+=======
                 Toast.makeText(this, "Failed to update booking: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+>>>>>>> 5e233c7c3562890288bc3be70aaab896d23edf59
 }
